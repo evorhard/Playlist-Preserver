@@ -1,5 +1,9 @@
 # Playlist Preserver
 
+## Current State
+
+In it's current state the application is able to retrieve the user's playlists, but not the content yet. As soon as this feature is built I will update the [Getting Started](#getting-started) section to explain how to get the initial program to run.
+
 ## Description
 
 This little application was born out of the idea that I might one day lose all my music collection if, for some reason, Spotify went under. Or there backups did not get everything. So this application will allow you to backup your playlists.
