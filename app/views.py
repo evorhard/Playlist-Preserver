@@ -26,6 +26,7 @@ views_blueprint = Blueprint("views", __name__)
 
 @views_blueprint.route("/")
 def index():
+    return render_template("login.html")
     return "Welcome to my Spotify App <a href='/login'>Login with Spotify</a>"
 
 
@@ -70,8 +71,6 @@ def callback():
         session["refresh_token"] = token_info["refresh_token"]
         session["expires_at"] = datetime.now().timestamp() + token_info["expires_in"]
 
-        logger.info(session)
-
         return redirect("/user-id")
 
 
@@ -96,11 +95,15 @@ def get_playlists():
     if "user_id" not in session:
         return redirect("/login")
 
-    playlists = get_user_playlist(
+    playlists_data = get_user_playlist(
         access_token=session["access_token"], user_id=session["user_id"]
     )
 
-    return jsonify(playlists)
+    playlists = playlists_data.get("items", [])
+
+    return render_template(
+        "playlists.html", playlists=playlists, display_name=session["display_name"]
+    )
 
 
 @views_blueprint.route("/refresh-token")

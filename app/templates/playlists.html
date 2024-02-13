@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Playlists</title>
+  </head>
+  <body>
+    <h1>Spotify Playlists</h1>
+    <p>Hey {{ display_name }}, here are your playlists.</p>
+    <ul>
+      {% for playlist in playlists %}
+      <li>
+        <a href="{{ playlist.external_urls.spotify }}">{{ playlist.name }}</a>
+        - {{ playlist.description }}
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
