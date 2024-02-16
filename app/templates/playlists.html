@@ -2,16 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Playlists</title>
+    <title>Your Spotify Playlists</title>
   </head>
   <body>
-    <h1>Spotify Playlists</h1>
-    <p>Hey {{ display_name }}, here are your playlists.</p>
+    <h1>Your Spotify Playlists</h1>
     <ul>
       {% for playlist in playlists %}
       <li>
-        <a href="{{ playlist.external_urls.spotify }}">{{ playlist.name }}</a>
-        - {{ playlist.description }}
+        <a
+          href="{{ url_for('views.download_playlist', playlist_id=playlist.id) }}"
+          target="_blank"
+        >
+          {{ playlist.name }}
+        </a>
       </li>
       {% endfor %}
     </ul>

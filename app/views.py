@@ -1,7 +1,18 @@
+import json
+
 from urllib import parse as urllibparse
 
 from datetime import datetime
-from flask import Blueprint, jsonify, redirect, session, render_template, request
+from flask import (
+    Blueprint,
+    jsonify,
+    redirect,
+    session,
+    render_template,
+    request,
+    send_file,
+    url_for,
+)
 from loguru import logger
 
 # Local imports
@@ -16,6 +27,7 @@ from config import (
 )
 from spotify_authorization import (
     exchange_code_for_token,
+    get_playlist_details,
     get_user_information,
     get_user_playlist,
     refresh_token,
@@ -103,6 +115,38 @@ def get_playlists():
 
     return render_template(
         "playlists.html", playlists=playlists, display_name=session["display_name"]
+    )
+
+
+@views_blueprint.route("/playlist/<playlist_id>")
+def playlist_details(playlist_id):
+    access_token = session.get("access_token")
+    user_id = session.get("user_id")
+
+    if not access_token or not user_id:
+        return redirect(url_for("login"))
+
+    playlist_data = get_playlist_details(access_token, user_id, playlist_id)
+
+    return jsonify(playlist_data)
+
+
+@views_blueprint.route("/download_playlist/<playlist_id>")
+def download_playlist(playlist_id):
+    access_token = session.get("access_token")
+    user_id = session.get("user_id")
+
+    if not access_token or not user_id:
+        return redirect(url_for("login"))
+
+    playlist_data = get_playlist_details(access_token, user_id, playlist_id)
+    # Example: Generating a file in memory (you might want to handle larger files differently)
+    from io import BytesIO
+
+    file_obj = BytesIO(json.dumps(playlist_data).encode("utf-8"))
+
+    return send_file(
+        file_obj, as_attachment=True, download_name=f"playlist_{playlist_id}.json"
     )
 
 
