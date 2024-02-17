@@ -32,6 +32,7 @@ from spotify_authorization import (
     get_user_playlist,
     refresh_token,
 )
+from data_utils import clean_json
 
 views_blueprint = Blueprint("views", __name__)
 
@@ -140,7 +141,9 @@ def download_playlist(playlist_id):
         return redirect(url_for("login"))
 
     playlist_data = get_playlist_details(access_token, user_id, playlist_id)
-    # Example: Generating a file in memory (you might want to handle larger files differently)
+
+    cleaned_json = clean_json(playlist_data)
+
     from io import BytesIO
 
     file_obj = BytesIO(json.dumps(playlist_data).encode("utf-8"))
