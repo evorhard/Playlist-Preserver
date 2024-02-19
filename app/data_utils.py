@@ -2,9 +2,9 @@ from typing import Dict
 
 
 def clean_json(data: Dict) -> Dict:
-    for item in data["items"]:
-        item["track"].pop("available_markets", None)
-        item["track"]["album"].pop("images", None)
-        item["track"]["album"].pop("available_markets", None)
+    track_list = ""
 
-    return data
+    for item in data["items"]:
+        track_list += f"{item['track']['artists'][0]['name']} - {item['track']['album']['name']}\n"
+
+    return track_list

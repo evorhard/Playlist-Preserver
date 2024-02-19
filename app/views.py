@@ -1,7 +1,3 @@
-import json
-
-from urllib import parse as urllibparse
-
 from datetime import datetime
 from flask import (
     Blueprint,
@@ -14,6 +10,9 @@ from flask import (
     url_for,
 )
 from loguru import logger
+from io import BytesIO
+
+from urllib import parse as urllibparse
 
 # Local imports
 from config import (
@@ -25,7 +24,7 @@ from config import (
     SCOPE,
     TOKEN_URL,
 )
-from spotify_authorization import (
+from spotify_interaction import (
     exchange_code_for_token,
     get_playlist_details,
     get_user_information,
@@ -142,14 +141,15 @@ def download_playlist(playlist_id):
 
     playlist_data = get_playlist_details(access_token, user_id, playlist_id)
 
-    cleaned_json = clean_json(playlist_data)
+    clean_data = clean_json(playlist_data)
 
-    from io import BytesIO
-
-    file_obj = BytesIO(json.dumps(playlist_data).encode("utf-8"))
+    file_obj = BytesIO(clean_data.encode("utf-8"))
 
     return send_file(
-        file_obj, as_attachment=True, download_name=f"playlist_{playlist_id}.json"
+        file_obj,
+        as_attachment=True,
+        download_name=f"playlist_{playlist_id}.txt",
+        mimetype="text/plain",
     )
 
 
