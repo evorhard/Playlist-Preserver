@@ -11,7 +11,7 @@ This little application was born out of the idea that I might one day lose all m
 ## Tech Stack
 
 - **Language**: Python
-- **Libraries**: Flask, Loguru
+- **Libraries**: Flask, Loguru, Requests, URLLib
 - **APIs**: Spotify API
 
 ## Planned Features
