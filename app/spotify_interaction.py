@@ -75,12 +75,11 @@ def get_user_playlist(access_token: str, user_id: str) -> Dict:
     return playlists
 
 
-def get_playlist_details(access_token: str, user_id: str, playlist_id: str) -> Dict:
+def get_playlist_details(access_token: str, playlist_id: str) -> Dict:
     """Gets the details of the playlist in JSON format
 
     Arguments:
         access_token {str} -- access token needed to access user information such as playlists
-        user_id {str} -- the user's id
 
     Returns:
         Dict -- playlist in json format
@@ -89,7 +88,7 @@ def get_playlist_details(access_token: str, user_id: str, playlist_id: str) -> D
 
     response = requests.request(
         "GET",
-        f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=50",
+        f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=50&offset=0",
         headers=headers,
     )
     playlists = response.json()

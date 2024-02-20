@@ -31,7 +31,7 @@ from spotify_interaction import (
     get_user_playlist,
     refresh_token,
 )
-from data_utils import clean_json
+from data_utils import get_all_pages, clean_json
 
 views_blueprint = Blueprint("views", __name__)
 
@@ -39,7 +39,6 @@ views_blueprint = Blueprint("views", __name__)
 @views_blueprint.route("/")
 def index():
     return render_template("login.html")
-    return "Welcome to my Spotify App <a href='/login'>Login with Spotify</a>"
 
 
 @views_blueprint.route("/login")
@@ -107,11 +106,18 @@ def get_playlists():
     if "user_id" not in session:
         return redirect("/login")
 
+    if "playlist_names" not in session:
+        session["playlist_names"] = {}
+
     playlists_data = get_user_playlist(
         access_token=session["access_token"], user_id=session["user_id"]
     )
 
     playlists = playlists_data.get("items", [])
+
+    for playlist in playlists:
+        logger.info(playlist["name"])
+        session["playlist_names"][playlist["id"]] = playlist["name"]
 
     return render_template(
         "playlists.html", playlists=playlists, display_name=session["display_name"]
@@ -134,21 +140,29 @@ def playlist_details(playlist_id):
 @views_blueprint.route("/download_playlist/<playlist_id>")
 def download_playlist(playlist_id):
     access_token = session.get("access_token")
-    user_id = session.get("user_id")
-
-    if not access_token or not user_id:
+    if not access_token:
         return redirect(url_for("login"))
 
-    playlist_data = get_playlist_details(access_token, user_id, playlist_id)
+    playlist_name = session.get("playlist_names", {}).get(
+        playlist_id, "Unknown Playlist"
+    )
+
+    playlist_data = get_playlist_details(access_token, playlist_id)
+    if playlist_data["total"] > 50:
+        playlist_data = get_all_pages(
+            access_token, playlist_id, total=playlist_data["total"]
+        )
 
     clean_data = clean_json(playlist_data)
-
     file_obj = BytesIO(clean_data.encode("utf-8"))
 
+    # TODO Sanitize filename
+    # safe_name = sanitize_filename(playlist_name)
+    safe_name = playlist_name
     return send_file(
         file_obj,
         as_attachment=True,
-        download_name=f"playlist_{playlist_id}.txt",
+        download_name=f"{safe_name}.txt",
         mimetype="text/plain",
     )
 
