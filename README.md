@@ -18,7 +18,8 @@ This little application was born out of the idea that I might one day lose all m
 
 - **Automatic Backups**: Periodic backups set to the time you want.
 - **Automatic Upload of Backups**: Automatically upload your playlists to some cloud hosting.
-- **Different Formats**: For now the output will be the what the Spotify API outputs.
+- **Different Formats**: For now the output will be a plain-text list of your songs in a clean format.
+- **Spotify Import**: A way for you to import these lists back into Spotify.
 
 ## Getting Started
 
