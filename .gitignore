@@ -5,7 +5,6 @@
 planning.md
 *.zip
 src/config.py
-tests
 docker-compose.yml
 
 ### Python ###
