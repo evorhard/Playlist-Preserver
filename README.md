@@ -2,11 +2,11 @@
 
 ## Current State
 
-In it's current state the application is able to retrieve the user's playlists, but not the content yet. As soon as this feature is built I will update the [Getting Started](#getting-started) section to explain how to get the initial program to run.
+In it's current state the application is able to retrieve the user's playlists and download the playlists to disk. What still needs to be implemented is feedback for the downloading (it has to loop through calls because of the API limit) and so it just now shows a blank tab. Proper tests need to be written afterwards. As soon as this is done I will update the [Getting Started](#getting-started) section to explain how to get the initial program to run.
 
 ## Description
 
-This little application was born out of the idea that I might one day lose all my music collection if, for some reason, Spotify went under. Or there backups did not get everything. So this application will allow you to backup your playlists.
+This little application was born out of the idea that I might one day lose all my music collection if, for some reason, Spotify went under. Or their backups did not get everything. So this application will allow you to backup your playlists.
 
 ## Tech Stack
 
