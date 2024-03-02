@@ -49,4 +49,4 @@ The project is in its initial stages of development. Regular updates will be pus
 
 ---
 
-_This README is subject to change as Disc List Scout evolves._
+_This README is subject to change as Playlist Preserver evolves._
