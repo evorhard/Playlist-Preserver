@@ -1,14 +1,12 @@
+from celery import Celery
 from flask import Flask
 
 # Local imports
-from config import APP_SECRET
 from views import views_blueprint
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-
-    app.secret_key = APP_SECRET
 
     if test_config:
         app.config.update(test_config)
@@ -18,6 +16,18 @@ def create_app(test_config=None):
     return app
 
 
+def create_celery(app):
+    celery = Celery(
+        app.import_name,
+        backend=app.config["CELERY_RESULT_BACKEND"],
+        broker=app.config["CELERY_BROKER_URL"],
+    )
+    celery.conf.update(app.config)
+
+    return celery
+
+
 if __name__ == "__main__":
     app = create_app()
+    celery = create_celery(app)
     app.run(host="0.0.0.0", debug=True)

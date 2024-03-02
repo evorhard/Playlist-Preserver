@@ -7,6 +7,10 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/playlist-style.css') }}"
     />
+    <script
+      defer
+      src="{{ url_for('static', filename='js/downloadHandler.js') }}"
+    ></script>
   </head>
   <body>
     <h1>Your Spotify Playlists</h1>
@@ -14,8 +18,8 @@
       {% for playlist in playlists %}
       <li>
         <a
+          class="playlist-download"
           href="{{ url_for('views.download_playlist', playlist_id=playlist.id) }}"
-          target="_blank"
         >
           {{ playlist.name }}
         </a>

@@ -1,12 +1,12 @@
 from datetime import datetime
 from flask import (
     Blueprint,
+    flash,
     jsonify,
     redirect,
     session,
     render_template,
     request,
-    send_file,
     url_for,
 )
 from loguru import logger
@@ -16,7 +16,6 @@ from urllib import parse as urllibparse
 
 # Local imports
 from config import (
-    API_BASE_URL,
     AUTHORIZATION_URL,
     CLIENT_ID,
     CLIENT_SECRET,
@@ -31,7 +30,7 @@ from spotify_interaction import (
     get_user_playlist,
     refresh_token,
 )
-from data_utils import get_all_pages, clean_json
+from data_utils import download_playlist_task
 
 views_blueprint = Blueprint("views", __name__)
 
@@ -77,6 +76,7 @@ def callback():
         token_info = exchange_code_for_token(
             request.args["code"], CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL
         )
+        logger.info(token_info)
 
         session["access_token"] = token_info["access_token"]
         session["refresh_token"] = token_info["refresh_token"]
@@ -147,24 +147,11 @@ def download_playlist(playlist_id):
         playlist_id, "Unknown Playlist"
     )
 
-    playlist_data = get_playlist_details(access_token, playlist_id)
-    if playlist_data["total"] > 50:
-        playlist_data = get_all_pages(
-            access_token, playlist_id, total=playlist_data["total"]
-        )
+    task = download_playlist_task.delay(access_token, playlist_id, playlist_name)
 
-    clean_data = clean_json(playlist_data)
-    file_obj = BytesIO(clean_data.encode("utf-8"))
+    flash("Download started...")
 
-    # TODO Sanitize filename
-    # safe_name = sanitize_filename(playlist_name)
-    safe_name = playlist_name
-    return send_file(
-        file_obj,
-        as_attachment=True,
-        download_name=f"{safe_name}.txt",
-        mimetype="text/plain",
-    )
+    return redirect(url_for("some_view_showing_progress", task_id=task.id))
 
 
 @views_blueprint.route("/refresh-token")

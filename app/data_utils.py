@@ -1,8 +1,14 @@
 import math
 import requests
 
+from io import BytesIO
 from time import sleep
 from typing import Dict
+
+from celery import current_app as celery_app
+
+# Local imports
+from spotify_interaction import get_playlist_details
 
 
 def get_all_pages(access_token: str, playlist_id: str, total: int) -> Dict:
@@ -33,3 +39,16 @@ def clean_json(data: Dict) -> Dict:
         track_list += f"{item['track']['artists'][0]['name']} - {item['track']['album']['name']}\n"
 
     return track_list
+
+
+@celery_app.task(bind=True)
+def download_playlist_task(
+    self, access_token: str, playlist_id: str, playlist_name: str
+):
+    playlist_data = get_playlist_details(access_token, playlist_id)
+    if playlist_data["total"] > 50:
+        playlist_data = get_all_pages(access_token, playlist_id, playlist_data["total"])
+
+    clean_data = clean_json(playlist_data)
+
+    return clean_data
