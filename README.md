@@ -10,7 +10,7 @@ This little application was born out of the idea that I might one day lose all m
 
 ## Tech Stack
 
-- **Languages**: Python, JavaScript, Ajax
+- **Languages**: Python, JavaScript, Ajax, HTML5
 - **Libraries**: Flask, Loguru, Requests, URLLib, Celery
 - **APIs**: Spotify API
 
