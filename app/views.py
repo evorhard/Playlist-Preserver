@@ -10,7 +10,6 @@ from flask import (
     url_for,
 )
 from loguru import logger
-from io import BytesIO
 
 from urllib import parse as urllibparse
 
@@ -76,7 +75,7 @@ def callback():
         token_info = exchange_code_for_token(
             request.args["code"], CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL
         )
-        logger.info(token_info)
+        logger.info(token_info["access_token"])
 
         session["access_token"] = token_info["access_token"]
         session["refresh_token"] = token_info["refresh_token"]
