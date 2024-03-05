@@ -27,7 +27,7 @@ _This section will be updated with installation, configuration, and usage instru
 
 ## Contributing
 
-While Disc List Scout is currently a personal project, I may consider opening it up for contributions in the future. Feel free to fork the project and experiment on your own. Any major changes proposed can be discussed through pull requests.
+While Playlist Preserver is currently a personal project, I may consider opening it up for contributions in the future. Feel free to fork the project and experiment on your own. Any major changes proposed can be discussed through pull requests.
 
 ## License
 
@@ -39,14 +39,10 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-## Acknowledgments
-
-Inspiration for this project comes from the vast and diverse music communities on platforms like Discogs and RateYourMusic.
-
 ## Project Status
 
 The project is in its initial stages of development. Regular updates will be pushed to this repository as progress is made.
 
 ---
 
-_This README is subject to change as Disc List Scout evolves._
+_This README is subject to change as Playlist Preserver evolves._
