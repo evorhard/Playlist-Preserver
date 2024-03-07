@@ -1,9 +1,11 @@
+import json
+
 from datetime import datetime
 from flask import (
     Blueprint,
-    flash,
     jsonify,
     redirect,
+    send_file,
     session,
     render_template,
     request,
@@ -29,7 +31,7 @@ from spotify_interaction import (
     get_user_playlist,
     refresh_token,
 )
-from data_utils import download_playlist_task
+from data_utils import clean_json
 
 views_blueprint = Blueprint("views", __name__)
 
@@ -131,7 +133,7 @@ def playlist_details(playlist_id):
     if not access_token or not user_id:
         return redirect(url_for("login"))
 
-    playlist_data = get_playlist_details(access_token, user_id, playlist_id)
+    playlist_data = get_playlist_details(access_token, playlist_id)
 
     return jsonify(playlist_data)
 
@@ -139,18 +141,22 @@ def playlist_details(playlist_id):
 @views_blueprint.route("/download_playlist/<playlist_id>")
 def download_playlist(playlist_id):
     access_token = session.get("access_token")
-    if not access_token:
+    user_id = session.get("user_id")
+
+    if not access_token or not user_id:
         return redirect(url_for("login"))
 
-    playlist_name = session.get("playlist_names", {}).get(
-        playlist_id, "Unknown Playlist"
+    playlist_data = get_playlist_details(access_token, playlist_id)
+
+    cleaned_json = clean_json(playlist_data)
+
+    from io import BytesIO
+
+    file_obj = BytesIO(json.dumps(cleaned_json).encode("utf-8"))
+
+    return send_file(
+        file_obj, as_attachment=True, download_name=f"playlist_{playlist_id}.json"
     )
-
-    task = download_playlist_task.delay(access_token, playlist_id, playlist_name)
-
-    flash("Download started...")
-
-    return redirect(url_for("some_view_showing_progress", task_id=task.id))
 
 
 @views_blueprint.route("/refresh-token")
