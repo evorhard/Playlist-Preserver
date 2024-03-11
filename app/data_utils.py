@@ -10,7 +10,7 @@ def get_all_pages(access_token: str, playlist_id: str, total: int) -> Dict:
     aggregated_data = {"items": []}
 
     for page in range(number_of_pages):
-        sleep(1)
+        sleep(0.25)
 
         headers = {"Authorization": f"Bearer {access_token}"}
         offset = page * 50  # Calculate the correct offset for each page

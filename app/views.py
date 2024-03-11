@@ -1,5 +1,3 @@
-import json
-
 from datetime import datetime
 from flask import (
     Blueprint,
@@ -12,6 +10,7 @@ from flask import (
     url_for,
 )
 from loguru import logger
+from io import BytesIO
 
 from urllib import parse as urllibparse
 
@@ -133,7 +132,7 @@ def playlist_details(playlist_id):
     if not access_token or not user_id:
         return redirect(url_for("login"))
 
-    playlist_data = get_playlist_details(access_token, playlist_id)
+    playlist_data = get_playlist_details(access_token, user_id, playlist_id)
 
     return jsonify(playlist_data)
 
@@ -141,21 +140,23 @@ def playlist_details(playlist_id):
 @views_blueprint.route("/download_playlist/<playlist_id>")
 def download_playlist(playlist_id):
     access_token = session.get("access_token")
-    user_id = session.get("user_id")
 
-    if not access_token or not user_id:
+    if not access_token:
         return redirect(url_for("login"))
 
     playlist_data = get_playlist_details(access_token, playlist_id)
 
-    cleaned_json = clean_json(playlist_data)
-
-    from io import BytesIO
-
-    file_obj = BytesIO(json.dumps(cleaned_json).encode("utf-8"))
+    clean_data = clean_json(playlist_data)
+    playlist_name = session.get("playlist_names", {}).get(
+        playlist_id, "Unknown Playlist"
+    )
+    file_obj = BytesIO(clean_data.encode("utf-8"))
 
     return send_file(
-        file_obj, as_attachment=True, download_name=f"playlist_{playlist_id}.json"
+        file_obj,
+        as_attachment=True,
+        download_name=f"{playlist_name}.txt",
+        mimetype="text/plain",
     )
 
 
