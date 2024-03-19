@@ -52,7 +52,7 @@ def login():
         "response_type": "code",
         "scope": SCOPE,
         "redirect_uri": REDIRECT_URI,
-        "show_dialog": True,
+        "show_dialog": False,
     }
 
     authorization_url = (
