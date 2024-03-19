@@ -30,7 +30,7 @@ from spotify_interaction import (
     get_user_playlist,
     refresh_token,
 )
-from data_utils import clean_json
+from data_utils import clean_json, get_all_pages
 
 views_blueprint = Blueprint("views", __name__)
 
@@ -145,6 +145,10 @@ def download_playlist(playlist_id):
         return redirect(url_for("login"))
 
     playlist_data = get_playlist_details(access_token, playlist_id)
+    if playlist_data["total"] > 50:
+        playlist_data = get_all_pages(
+            access_token, playlist_id, total=playlist_data["total"]
+        )
 
     clean_data = clean_json(playlist_data)
     playlist_name = session.get("playlist_names", {}).get(
