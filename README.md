@@ -33,7 +33,7 @@ For now the app can only be run locally (and I honestly do not have plans to hav
 3. Install the required packages using ```pip install -r requirements.txt```
 4. In the main folder create a ```.env``` file, we will populate this with some required keys in a bit.
 5. Go to https://developer.spotify.com/dashboard and create an app, name it whatever you want.
-6. Go to the settings menu and copy both the Client ID and Client Secret and populate the ```.env`` file like so:
+6. Go to the settings menu and copy both the Client ID and Client Secret and populate the ```.env``` file like so:
   ```
   CLIENT_ID = {YOUR_CLIENT_ID}
   CLIENT_SECRET = {YOU_CLIENT_SECRET}
